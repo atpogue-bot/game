@@ -2,7 +2,7 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
 add_executable(test-core)
 
-target_sources (test-core PRIVATE registry.cc)
+target_sources (test-core PRIVATE registry.cc spatial-grid.cc)
 
 target_include_directories(test-core PRIVATE ${catch2_INCLUDE_DIRS}/src)
 
