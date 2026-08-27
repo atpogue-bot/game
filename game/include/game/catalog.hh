@@ -1,10 +1,12 @@
 #pragma once
 #include "core/basic-catalog.hh"
+#include "game/flock.hh"
 #include "game/terrain.hh"
 #include "game/texture.hh"
 #include "game/types.hh"
 
-using Definitions = TypeList<TextureDef, Terrain>;
+// Append only, for the same reason as the component list: a definition's position is its store.
+using Definitions = TypeList<TextureDef, Terrain, Flock>;
 
 using Catalog = BasicCatalog<Definitions>;
 

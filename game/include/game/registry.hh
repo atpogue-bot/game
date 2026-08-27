@@ -1,9 +1,14 @@
 #pragma once
 #include "core/basic-registry.hh"
+#include "game/component/boid.hh"
+#include "game/component/figure.hh"
 #include "game/component/pose.hh"
+#include "game/component/velocity.hh"
 #include "game/types.hh"
 
-using Components = TypeList<Pose>;
+// Append only: a component's position in this list is its index into the registry's stores, so
+// inserting one in the middle renumbers every component after it.
+using Components = TypeList<Pose, Velocity, Figure, Boid>;
 
 using Registry = BasicRegistry<Entity, Components>;
 
@@ -82,6 +87,12 @@ struct RegistryView
   {
     return src_.template each<T>();
   }
+
+  // Iterates every live entity as a (handle, id) pair, in slot order. Systems that need more than
+  // one component per entity have to walk entities rather than a single store.
+  [[nodiscard]] auto begin() const { return src_.begin(); }
+
+  [[nodiscard]] auto end() const { return src_.end(); }
 
 private:
 

@@ -31,6 +31,10 @@ To run the game:
 ./bin/debug/play
 ```
 
+`play` is currently a boids demo: two flocks over a chunk of generated grassland, each bird
+steering only by what its neighbours are doing. WASD moves the camera, the mouse wheel zooms, and
+Q or escape quits. The flocks are tuned in `content/boids.lua`.
+
 To run the tests:
 ```bash
 ctest --preset debug

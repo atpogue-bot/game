@@ -1,6 +1,7 @@
 #include "game/load.hh"
 #include "game/catalog.hh"
 #include "game/context.hh"
+#include "game/flock.hh"
 #include "game/lua.hh"
 #include "game/terrain.hh"
 #include <SDL3/SDL_log.h>
@@ -12,6 +13,7 @@ bool load_content(LoadContext ctx, std::string_view path)
   lua_State* L       = luaL_newstate();
   ASSERT(L != nullptr, "failed to create lua state");
   lua::add_terrain_builder(L, catalog);
+  lua::add_flock_builder(L, catalog);
   auto result = lua::do_file(L, path);
   if (!result) {
     SDL_LogError(

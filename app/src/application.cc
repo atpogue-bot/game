@@ -4,6 +4,7 @@
 #include "game/catalog.hh"
 #include "game/chunk.hh"
 #include "game/command-buffer.hh"
+#include "game/component/figure.hh"
 #include "game/component/pose.hh"
 #include "game/context.hh"
 #include "game/entity.hh"
@@ -141,6 +142,24 @@ void Application::render(ConstContext ctx, f32)
       renderer_.draw_texture(texture, &sprite.source, &dst, &sprite.tint);
     }
   }
+
+  // Entities are drawn over the terrain. Unlike a tile, an entity sits at a continuous position,
+  // so its sprite is centred on that position rather than filling the cell it happens to be in.
+  auto registry = access_registry(ctx);
+  for (auto const& [handle, id] : registry) {
+    Pose const*   pose   = registry.try_get<Pose>(handle);
+    Figure const* figure = registry.try_get<Figure>(handle);
+    if (!pose || !figure) continue;
+    if (!bounds.contains(pose->position)) continue;
+    DEBUG_ASSERT(figure->sprite.atlas.value < textures_.size());
+    auto& texture = textures_[figure->sprite.atlas.value];
+    if (!texture) continue;
+    auto            scale = player_.camera.zoom * pixels_per_unit;
+    glm::vec2 const pixel = project.to_screen_space(player_.camera, pose->position);
+    Rectangle       dst{ pixel - scale * 0.5f, { scale, scale } };
+    renderer_.draw_texture(texture, &figure->sprite.source, &dst, &figure->sprite.tint);
+  }
+
   renderer_.present();
 }
 
