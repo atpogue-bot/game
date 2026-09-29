@@ -15,7 +15,8 @@ u64 random_seed()
 Xoshiro256ss::Xoshiro256ss(u64 seed)
 {
   SplitMix64 rng(seed);
-  for (int i = 0; i < 4; ++i) s[i] = rng();
+  for (int i = 0; i < 4; ++i)
+    s[i] = rng();
 }
 
 u64 Xoshiro256ss::operator()()

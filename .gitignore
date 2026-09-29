@@ -25,6 +25,7 @@ out/
 
 *.bak
 *.tmp
+*.old
 
 # Prerequisites
 *.d

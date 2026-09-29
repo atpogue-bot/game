@@ -217,7 +217,8 @@ public:
   [[nodiscard]] const_iterator cbegin() const noexcept
   {
     u32 i = 0u;
-    while (i < slots_.size() && !slots_[i].live) i++;
+    while (i < slots_.size() && !slots_[i].live)
+      i++;
     return const_iterator(this, i);
   }
 
@@ -230,7 +231,8 @@ public:
   [[nodiscard]] iterator begin() noexcept
   {
     u32 i = 0u;
-    while (i < slots_.size() && !slots_[i].live) i++;
+    while (i < slots_.size() && !slots_[i].live)
+      i++;
     return iterator(this, i);
   }
 

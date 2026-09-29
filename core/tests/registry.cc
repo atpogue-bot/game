@@ -61,7 +61,8 @@ TEST_CASE("Registry – entity creation and destruction", "[registry][entity]")
   SECTION("destroying entities")
   {
     std::array<Handle<Entity>, 10> entities;
-    for (auto& h : entities) h = r.create();
+    for (auto& h : entities)
+      h = r.create();
     for (u32 i = 0u; i < 10u; ++i) {
       REQUIRE(r.size() == 10u - i);
       auto const h = entities[i];
@@ -183,7 +184,8 @@ TEST_CASE("Registry – entity creation and destruction", "[registry][entity]")
   {
     // iterating empty registry
     int count = 0;
-    for (auto [h, _] : r) ++count;
+    for (auto [h, _] : r)
+      ++count;
     REQUIRE(count == 0);
 
     Handle<Entity> a = r.create(), b = r.create(), c = r.create(), d = r.create();
@@ -236,7 +238,8 @@ TEST_CASE("Registry – entity creation and destruction", "[registry][entity]")
   SECTION("entity meta-data")
   {
     Handle<Entity> h = r.create("foo");
-    for (auto [_, e] : r) REQUIRE(e.name == "foo");
+    for (auto [_, e] : r)
+      REQUIRE(e.name == "foo");
     // meta-data is independent, per-entity
     (void)r.create("bar");
     Entity const& e = r[h];

@@ -16,7 +16,9 @@ GrasslandGenerator::GrasslandGenerator(Context const ctx, u64 seed)
     find_terrain(ctx, "grass-tall"), find_terrain(ctx, "dirt"),    find_terrain(ctx, "rocks"),
   }
 {
-  for (auto token : terrain_) { PRECONDITION(token, "terrain undefined"); }
+  for (auto token : terrain_) {
+    PRECONDITION(token, "terrain undefined");
+  }
 }
 
 void GrasslandGenerator::generate(u32 x, u32 y, Chunk& chunk)
@@ -25,5 +27,7 @@ void GrasslandGenerator::generate(u32 x, u32 y, Chunk& chunk)
   Xoshiro256ss                       rng{ hash };
   std::uniform_int_distribution<u32> distribution{ 0u, (u32)std::size(terrain_) - 1u };
 
-  for (auto& tile : chunk) { tile.terrain = terrain_[distribution(rng)]; }
+  for (auto& tile : chunk) {
+    tile.terrain = terrain_[distribution(rng)];
+  }
 }

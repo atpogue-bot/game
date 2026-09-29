@@ -1,63 +1,20 @@
-/*
 #include "core/panic.hh"
-#include "engine/render/camera.hh"
-#include "game/catalog.hh"
-#include "game/context.hh"
-#include "game/terrain.hh"
 #include "game/world.hh"
 
-World::World(
-  u32                             width,
-  u32                             height,
-  std::unique_ptr<ChunkGenerator> generator,
-  std::unique_ptr<ChunkLoader>    loader)
-  : width_{ width }
-  , height_{ height }
-  , generator_(generator.release())
-  , loader_(loader.release())
-  , chunks_()
+Handle<Entity> World::create()
 {
-  DEBUG_ASSERT(width_ != 0u && height_ != 0u);
-  PRECONDITION(generator_);
-  PRECONDITION(loader_);
+  auto const id     = Entity{ _entity_counter++ };
+  auto const handle = _entities.create(id);
+  auto [_, success] = _lookup.emplace(id, handle);
+  INVARIANT(success);
+  return handle;
 }
 
-Tile& World::operator[](u32 x, u32 y)
+Handle<Entity> World::find_entity(Entity e) const
 {
-  DEBUG_ASSERT(has(x, y));
-  return get_chunk(key_at(x, y))[x % chunk_size, y % chunk_size];
+  auto it = _lookup.find(e);
+  return it != _lookup.end() ? it->second : Handle<Entity>::null();
 }
 
-Tile* World::get(u32 x, u32 y)
-{
-  if (!has(x, y)) return nullptr;
-  return &get_chunk(key_at(x, y))[x % chunk_size, y % chunk_size];
-}
+void World::advance() {}
 
-Tile const* World::find(u32 x, u32 y) const
-{
-  if (!has(x, y)) return nullptr;
-  auto chunk = find_chunk(key_at(x, y));
-  return chunk ? chunk->get(x % chunk_size, y % chunk_size) : nullptr;
-}
-
-Chunk const* World::find_chunk(u64 key) const
-{
-  if (auto it = chunks_.find(key); it != chunks_.end()) return &it->second;
-  return nullptr;
-}
-
-Chunk& World::get_chunk(u64 key)
-{
-  auto [it, is_new] = chunks_.try_emplace(key);
-  auto& chunk       = it->second;
-  if (is_new) {
-    u32 x, y;
-    coord_of(key, x, y);
-    generator_->generate(x, y, chunk);
-    loader_->load(x, y, chunk);
-    return chunk;
-  }
-  return chunk;
-}
-*/

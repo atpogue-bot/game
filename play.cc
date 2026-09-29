@@ -74,7 +74,8 @@ void render(Runtime& state, f32 alpha)
 void iterate(Runtime& state)
 {
   auto tick = state.clock.tick();
-  for (auto steps = state.clock.advance(); steps > 0; steps--) step(state, tick++);
+  for (auto steps = state.clock.advance(); steps > 0; steps--)
+    step(state, tick++);
   DEBUG_ASSERT(tick == state.clock.tick());
 
   update(state, state.clock.delta());

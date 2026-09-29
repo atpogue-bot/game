@@ -26,14 +26,14 @@ AlignConsecutiveShortCaseStatements:
 AllowAllArgumentsOnNextLine: true
 AllowBreakBeforeNoexceptSpecifier: OnlyWithParen
 AlignEscapedNewlines: Left
-AllowShortBlocksOnASingleLine: Always
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseExpressionOnASingleLine: true
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: true
 AllowShortNamespacesOnASingleLine: true
-AllowShortCaseLabelsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 # AllowShortRecordOnASingleLine = Always # v23
 AlwaysBreakTemplateDeclarations: true
 BreakAdjacentStringLiterals: false
@@ -85,11 +85,12 @@ IndentExportBlock: true
 IndentExternBlock: true
 IndentPPDirectives: BeforeHash
 IndentRequiresClause: false
+InsertBraces: false
+InsertNewlineAtEOF: false
 IntegerLiteralSeparator:
     Decimal: 3
 IncludeBlocks:   Merge
 IncludeIsMainRegex: '$'
-InsertNewlineAtEOF: true
 LambdaBodyIndentation: Signature
 ReflowComments: Always
 RequiresClausePosition: WithPreceding

@@ -13,8 +13,8 @@ struct Defer
 template <typename F>
 Defer(F) -> Defer<F>;
 
-#define DEFER(expr)       \
-  Defer _defer_##__LINE__ \
-  {                       \
-    [&] { expr; }         \
+#define DEFER(expr)         \
+  Defer _defer##__COUNTER__ \
+  {                         \
+    [&] { expr; }           \
   }

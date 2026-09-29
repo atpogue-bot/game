@@ -79,18 +79,14 @@ void Application::handle_event(SDL_Event const& event)
   case SDL_EVENT_KEY_DOWN:
     switch (event.key.scancode) {
     case SDL_SCANCODE_ESCAPE:
-    case SDL_SCANCODE_Q:
-      push_event(make_quit_event());
-      return;
-    default:
-      break;
+    case SDL_SCANCODE_Q:      push_event(make_quit_event()); return;
+    default:                  break;
     }
     break;
   case SDL_EVENT_MOUSE_WHEEL:
     player_.camera.zoom = glm::clamp(player_.camera.zoom + 0.5f * event.wheel.y, 0.7f, 1.9f);
     return;
-  default:
-    break;
+  default: break;
   }
 
   if (player_.pilot) player_.pilot->handle_event(event);
