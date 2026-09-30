@@ -70,11 +70,13 @@ struct SpatialGrid
       cells_[i]        = cell;
       ++offsets_[cell + 1u];
     }
-    for (u32 cell = 0u; cell < cells; ++cell) offsets_[cell + 1u] += offsets_[cell];
+    for (u32 cell = 0u; cell < cells; ++cell)
+      offsets_[cell + 1u] += offsets_[cell];
     INVARIANT(offsets_[cells] == count, "counting sort lost points");
 
     cursors_.assign(offsets_.begin(), offsets_.end() - 1);
-    for (u32 i = 0u; i < count; ++i) items_[cursors_[cells_[i]]++] = i;
+    for (u32 i = 0u; i < count; ++i)
+      items_[cursors_[cells_[i]]++] = i;
   }
 
   // Visit the index of every point bucketed in a cell that overlaps the square of half-width
@@ -95,7 +97,8 @@ struct SpatialGrid
       for (u32 column = first_column; column <= last_column; ++column) {
         u32 const cell = start + column;
         DEBUG_ASSERT(cell + 1u < offsets_.size());
-        for (u32 i = offsets_[cell]; i < offsets_[cell + 1u]; ++i) visit(items_[i]);
+        for (u32 i = offsets_[cell]; i < offsets_[cell + 1u]; ++i)
+          visit(items_[i]);
       }
     }
   }

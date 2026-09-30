@@ -1,15 +1,17 @@
 #pragma once
 #include "game/chunk.hh"
 
-struct Terrain;
+namespace Game {
+  struct World;
 
-struct GrasslandGenerator : ChunkGenerator
-{
-  GrasslandGenerator(Context const ctx, u64 seed);
-  void generate(u32 x, u32 y, Chunk& chunk) override;
+  struct GrasslandGenerator : ChunkGenerator
+  {
+    GrasslandGenerator(World const&, u64 seed);
+    void generate(u32 x, u32 y, Chunk& chunk) override;
 
-private:
+  private:
 
-  u64 const            seed_;
-  Token<Terrain> const terrain_[6];
-};
+    u64 const             seed_;
+    Handle<Terrain> const terrain_[6];
+  };
+}

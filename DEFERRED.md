@@ -14,15 +14,26 @@ enough to point at lives in a `// TODO:` next to the code instead.
   the only producer of `Velocity` today and needs the flock's own speed limits while doing it. When
   a second thing moves continuously, integration belongs in one system that owns every entity with
   both components, and flocking should stop at writing the steering force.
+- **Systems driven by the world.** `World::advance` is where a tick of simulation belongs, but it
+  takes no timestep and the world owns no systems, so `play.cc` calls `Flocking::step` itself. Once
+  the world can drive its own systems, the demo should hand it a flocking system rather than a
+  call.
 - **Predators.** A `Flock` should be able to name what its members flee from, so that the player
   (or a hawk) scatters the flock on approach. This is the cheapest large gain available to the
   demo: one more urge, weighted like the others.
-- **Bounds from the world.** `Flocking` is constructed with the rectangle it keeps boids inside,
-  which is the demo's one chunk. Real bounds belong to `World`, and a flock crossing a chunk
-  boundary should be a loading question, not a steering one.
-- **Component queries.** `Flocking::gather` walks every live entity once per flock kind because the
-  registry cannot join stores. `BasicRegistry` already carries a TODO for `query<Ts...>()`; the
-  gather pass is the first caller that would benefit.
+- **Bounds from the world.** `Flocking` is constructed with the area it keeps boids inside, which
+  is the demo's one chunk. Real bounds belong to `World`, and a flock crossing a chunk boundary
+  should be a loading question, not a steering one.
+- **Component queries.** `Flocking::gather` walks every live entity because the registry cannot
+  join stores. `BasicRegistry` already carries a TODO for `query<Ts...>()`; the gather pass is the
+  first caller that would benefit.
+
+## Presentation
+
+- **What an entity looks like.** `State::render` draws boids by keying on the `Boid` component and
+  indexing the flock's sprite. That works while boids are the only visible entity, but it is not a
+  general answer: the application needs a way to say what an arbitrary entity looks like, without
+  putting a sprite back into the simulation, where it does not belong.
 
 ## Content
 
@@ -38,6 +49,7 @@ enough to point at lives in a `// TODO:` next to the code instead.
 ## Tests
 
 - **A `game` test target.** The flocking system has no unit tests because `game/` has no test
-  target, and adding one edits `game/CMakeLists.txt`. Worth adding: a flock is a good subject for
-  characterisation tests -- that the order parameter rises, that the flock stays inside its bounds,
-  and above all that a seed reproduces a run exactly.
+  target, and adding one edits `game/CMakeLists.txt`. `app/tests` shows the shape it would take.
+  Worth adding: a flock is a good subject for characterisation tests -- that the order parameter
+  rises, that the flock stays inside its bounds, and above all that a seed reproduces a run
+  exactly.

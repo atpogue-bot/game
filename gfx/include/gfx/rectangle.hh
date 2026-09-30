@@ -34,4 +34,3 @@ struct Rectangle
     return Rectangle(lo, hi - lo);
   }
 };
-

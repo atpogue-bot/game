@@ -6,6 +6,7 @@
 #include <string_view>
 #include <tuple>
 
+// Goal: append-only, patchable, stable index, serializable
 template <typename List>
 struct BasicCatalog;
 
@@ -18,55 +19,57 @@ struct BasicCatalog<TypeList<Types...>>
   BasicCatalog& operator=(BasicCatalog const&) = delete;
 
   template <typename T>
-  [[nodiscard]] bool valid(Token<T> token) const
+  [[nodiscard]] bool valid(Handle<T> handle) const
   {
-    return token.value < store_of<T>().size();
+    return handle.generation == generation_ && handle.index < store_of<T>().size();
   }
 
   template <typename T>
-  [[nodiscard]] Token<T> find(std::string_view label) const
+  [[nodiscard]] Handle<T> find(std::string_view label) const
   {
-    return { store_of<T>().find(label) };
+    return { store_of<T>().find(label), generation_ };
   }
 
   template <typename T>
-  [[nodiscard]] std::string_view label(Token<T> token) const
+  [[nodiscard]] std::string_view label(Handle<T> handle) const
   {
-    DEBUG_ASSERT(valid(token));
-    return store_of<T>().key(token.value);
+    DEBUG_ASSERT(valid(handle));
+    return store_of<T>().key(handle.index);
   }
 
   template <typename T>
-  [[nodiscard]] T& operator[](Token<T> token)
+  [[nodiscard]] T& operator[](Handle<T> handle)
   {
-    DEBUG_ASSERT(valid(token));
-    return store_of<T>()[token.value];
+    DEBUG_ASSERT(valid(handle));
+    return store_of<T>()[handle.index];
   }
 
   template <typename T>
-  [[nodiscard]] T const& operator[](Token<T> token) const
+  [[nodiscard]] T const& operator[](Handle<T> handle) const
   {
-    DEBUG_ASSERT(valid(token));
-    return store_of<T>()[token.value];
+    DEBUG_ASSERT(valid(handle));
+    return store_of<T>()[handle.index];
   }
 
   template <typename T, typename... Args>
   requires std::constructible_from<T, Args...>
-  Token<T> emplace(std::string_view label, Args&&... args)
+  Handle<T> emplace(std::string_view label, Args&&... args)
   {
-    return { store_of<T>().emplace(label, std::forward<Args>(args)...) };
+    return { store_of<T>().emplace(label, std::forward<Args>(args)...), generation_ };
   }
 
   template <typename T>
-  [[nodiscard]] T const* try_get(std::string_view label) const
+  [[nodiscard]] T const* try_get(Handle<T> handle) const
   {
-    return store_of<T>().try_get(label);
+    if (!valid(handle)) return nullptr;
+    return &store_of<T>()[handle.index];
   }
 
   template <typename T>
-  [[nodiscard]] T* try_get(std::string_view label)
+  [[nodiscard]] T* try_get(Handle<T> handle)
   {
-    return store_of<T>().try_get(label);
+    if (!valid(handle)) return nullptr;
+    return &store_of<T>()[handle.index];
   }
 
   void clear()
@@ -112,6 +115,7 @@ private:
 
   BasicCatalog(BasicCatalog const&) = default;
 
+  u32                                           generation_ = 0u;
   std::tuple<IndexedMap<std::string, Types>...> stores_;
 };
 

@@ -96,13 +96,15 @@ TEST_CASE("spatial grid keeps every point it is given", "[spatial-grid]")
   REQUIRE(grid.size() == 512u);
 
   size_t total = 0u;
-  for (u32 cell = 0u; cell < grid.columns() * grid.rows(); ++cell) total += grid.cell(cell).size();
+  for (u32 cell = 0u; cell < grid.columns() * grid.rows(); ++cell)
+    total += grid.cell(cell).size();
   CHECK(total == points.size());
 
   // Every index appears exactly once across all cells.
   std::set<u32> seen;
   for (u32 cell = 0u; cell < grid.columns() * grid.rows(); ++cell)
-    for (u32 index : grid.cell(cell)) seen.insert(index);
+    for (u32 index : grid.cell(cell))
+      seen.insert(index);
   CHECK(seen.size() == points.size());
 }
 

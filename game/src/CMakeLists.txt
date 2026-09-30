@@ -1,2 +1,3 @@
+add_subdirectory (content)
 add_subdirectory (biome)
-target_sources (game PRIVATE load.cc command.cc command-buffer.cc catalog.cc registry.cc entity.cc context.cc scene.cc lua.cc terrain.cc sprite.cc flock.cc flocking.cc)
+target_sources (game PRIVATE command.cc command-buffer.cc flocking.cc world.cc)

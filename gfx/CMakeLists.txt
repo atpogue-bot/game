@@ -1,15 +1,14 @@
-add_library (gfx)
+add_library(gfx)
 
-target_include_directories (
+target_include_directories(
   gfx
-  PRIVATE ${SDL3_INCLUDE_DIRS}
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries (
+target_link_libraries(
   gfx
-  PRIVATE SDL3::SDL3
-  PUBLIC glm::glm core sys
+  PUBLIC sys glm::glm
 )
 
-add_subdirectory (src)
+add_subdirectory(src)

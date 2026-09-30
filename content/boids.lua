@@ -13,13 +13,13 @@ local function make_sprite(x, y, color)
   return {
     atlas = 'content/kenney-1bitpack.png',
     source = { x * pitch, y * pitch, tilesize, tilesize },
-    color = color
+    tint = color
   }
 end
 
 -- Small and quick, turning hard enough to hold a sheet together at speed. Amber only so that
 -- they read against the grass; a real starling is closer to the background than that.
-flock 'starlings' {
+content.flock.starlings = {
   sprite = make_sprite(22, 10, 0xFFC15EFF),
   vision = 5.0,
   personal_space = 1.8,
@@ -35,7 +35,7 @@ flock 'starlings' {
 
 -- Bigger birds that keep more room around them and turn less sharply, so they string out into
 -- loose skeins instead of a sheet. Same four rules, different weights.
-flock 'gulls' {
+content.flock.gulls = {
   sprite = make_sprite(20, 9, 0xE8E4D9FF),
   vision = 7.0,
   personal_space = 2.6,
