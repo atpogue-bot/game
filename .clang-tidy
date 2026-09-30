@@ -6,7 +6,9 @@ Checks: >
     cert-*,
     performance-*,
     -bugprone-switch-missing-default-case,
-    -bugprone-easily-swappable-parameters
+    -bugprone-easily-swappable-parameters,
+    -clang-diagnostic-gnu-statement-expression,
+    -clang-diagnostic-gnu-statement-expression-from-macro-expansion
 # readability-*
 # modernize-*,
 # cppcoreguidelines-*,

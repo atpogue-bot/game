@@ -1,17 +1,14 @@
-add_library (sys)
+add_library(sys)
 
-target_include_directories (
+target_include_directories(
   sys
-  PUBLIC ${SDL3_INCLUDE_DIRS}
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL3_INCLUDE_DIRS}
 )
 
-target_link_libraries (
+target_link_libraries(
   sys
-  PUBLIC SDL3::SDL3
-  PUBLIC glm::glm
-  PUBLIC core
+  PUBLIC core SDL3::SDL3 glm::glm
 )
 
-add_subdirectory (src)
+add_subdirectory(src)
 

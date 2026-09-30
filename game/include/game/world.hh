@@ -1,66 +1,37 @@
 #pragma once
+#include "core/basic-catalog.hh"
+#include "core/basic-registry.hh"
 #include "game/chunk.hh"
-#include "game/tile.hh"
-#include <memory>
+#include "game/component/pose.hh"
+#include "game/content/terrain.hh"
+#include "game/entity.hh"
 #include <unordered_map>
 
-struct Context;
-struct Camera;
+namespace Game {
+  using Definitions = TypeList<Terrain>;
+  using Catalog     = BasicCatalog<Definitions>;
 
-struct World
-{
-  World(
-    u32                             width,
-    u32                             height,
-    std::unique_ptr<ChunkGenerator> generator,
-    std::unique_ptr<ChunkLoader>    loader);
-  World(World const& other)            = delete;
-  World& operator=(World const& other) = delete;
-  World(World&& other)                 = default;
-  World& operator=(World&& other)      = default;
+  using Components = TypeList<Pose>;
+  using Registry   = BasicRegistry<Entity, Components>;
 
-  constexpr u64 size() const { return u64{ chunk_size } * width_ * height_; }
-
-  constexpr bool has(u32 x, u32 y) const { return x < width_ && y < height_; }
-
-  void        render(ConstContext ctx, Camera const& camera, float tile_size) const;
-  Tile&       operator[](u32 x, u32 y);
-  Tile*       get(u32 x, u32 y);
-  Tile const* find(u32 x, u32 y) const;
-
-  constexpr void wrap_around(u32& x, u32& y) const
+  struct World
   {
-    x %= (chunk_size * width_);
-    y %= (chunk_size * height_);
-  }
+    Catalog  content;     // immutable after loading
+    Registry entities;    // entity data
+    Chunk    environment; // placeholder for a chunked world
 
-  constexpr auto begin() const { return chunks_.begin(); }
+    [[nodiscard]] Handle<Entity> find(Entity e) const;
 
-  constexpr auto begin() { return chunks_.begin(); }
+    [[nodiscard]] Handle<Entity> create();
 
-  constexpr auto end() const { return chunks_.end(); }
+    void advance();
 
-  constexpr auto end() { return chunks_.end(); }
+  private:
 
-  constexpr u32 width() const { return width_; }
+    // Total number of entities including those not loaded.
+    u64 entity_counter_ = 0u;
 
-  constexpr u32 height() const { return height_; }
-
-private:
-
-  u32                             width_, height_;
-  std::unique_ptr<ChunkGenerator> generator_;
-  std::unique_ptr<ChunkLoader>    loader_;
-  std::unordered_map<u64, Chunk>  chunks_;
-
-  constexpr u64 key_at(u32 x, u32 y) const { return x / chunk_size + (y / chunk_size) * width_; }
-
-  constexpr void coord_of(u64 key, u32& x, u32& y) const
-  {
-    x = key % width_ * chunk_size;
-    y = key / width_ * chunk_size;
-  }
-
-  Chunk const* find_chunk(u64 key) const;
-  Chunk&       get_chunk(u64 key);
-};
+    // Hash map used because entity IDs are sparse, not dense.
+    std::unordered_map<Entity, Handle<Entity>> lookup_;
+  };
+}

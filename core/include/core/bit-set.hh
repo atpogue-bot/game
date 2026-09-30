@@ -49,7 +49,8 @@ struct BitSet
   {
     PRECONDITION(this != &other);
     PRECONDITION(size_ == other.size_);
-    for (u32 i = 0u; i < size_; ++i) words_[i] |= other.words_[i];
+    for (u32 i = 0u; i < size_; ++i)
+      words_[i] |= other.words_[i];
     return *this;
   }
 
@@ -63,7 +64,8 @@ struct BitSet
   {
     PRECONDITION(this != &other);
     PRECONDITION(size_ == other.size_);
-    for (u32 i = 0u; i < size_; ++i) words_[i] &= other.words_[i];
+    for (u32 i = 0u; i < size_; ++i)
+      words_[i] &= other.words_[i];
     return *this;
   }
 
@@ -77,7 +79,8 @@ struct BitSet
   {
     PRECONDITION(this != &other);
     PRECONDITION(size_ == other.size_);
-    for (u32 i = 0u; i < size_; ++i) words_[i] ^= other.words_[i];
+    for (u32 i = 0u; i < size_; ++i)
+      words_[i] ^= other.words_[i];
     return *this;
   }
 

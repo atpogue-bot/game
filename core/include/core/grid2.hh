@@ -85,7 +85,8 @@ struct Grid2
   {
     if (x + src.width() > width_ || y + src.height() > height_) return false;
     for (u32 j = 0u; j < src.height(); ++j)
-      for (u32 i = 0u; i < src.width(); ++i) (*this)[x + i, y + j] = src[i, j];
+      for (u32 i = 0u; i < src.width(); ++i)
+        (*this)[x + i, y + j] = src[i, j];
     return true;
   }
 

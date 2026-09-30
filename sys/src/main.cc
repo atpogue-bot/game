@@ -37,13 +37,9 @@ SDL_AppResult SDL_AppEvent(void* state, SDL_Event* event)
   auto runtime = static_cast<Runtime*>(state);
   handle_event(*runtime, *event);
   switch (event->type) {
-  case SDL_EVENT_QUIT:
-    return SDL_APP_SUCCESS;
-  case SDL_EVENT_WINDOW_FOCUS_LOST:
-    SDL_ResetKeyboard();
-    break;
-  default:
-    break;
+  case SDL_EVENT_QUIT:              return SDL_APP_SUCCESS;
+  case SDL_EVENT_WINDOW_FOCUS_LOST: SDL_ResetKeyboard(); break;
+  default:                          break;
   }
   return SDL_APP_CONTINUE;
 }
